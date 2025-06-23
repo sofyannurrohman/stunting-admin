@@ -8,6 +8,7 @@ export interface ToddlerCreate {
   }
   
   export interface ToddlerUpdate {
+    name?: string
     gender?: string
     age_months?: number
     height_cm?: number

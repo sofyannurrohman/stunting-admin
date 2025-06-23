@@ -57,7 +57,6 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const dropdownOpen = ref(false)
-const dropdownRef = ref(null)
 
 const menuItems = [
   { href: '/profile', icon: UserCircleIcon, text: 'Edit profile' },
@@ -79,11 +78,14 @@ const signOut = () => {
   closeDropdown()
 }
 
-const handleClickOutside = (event) => {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+const dropdownRef = ref<HTMLElement | null>(null)
+
+const handleClickOutside = (event: MouseEvent) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
     closeDropdown()
   }
 }
+
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)

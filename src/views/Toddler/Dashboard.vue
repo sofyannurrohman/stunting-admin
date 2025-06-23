@@ -172,7 +172,7 @@ const handleUpdateToddler = async () => {
   try {
     const updateData: ToddlerUpdate = {
       name: editForm.value.name,
-      age: editForm.value.age,
+      age_months: editForm.value.age_months,
     }
     await updateToddler(editForm.value.id, updateData)
     closeEditModal()
