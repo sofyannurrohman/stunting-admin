@@ -227,7 +227,7 @@ const handleDeleteUser = async (user: UserRead) => {
 
 // Open/close modal
 const openCreateModal = () => {
-  form.value = { email: '', name: '', password: '' }
+  form.value = { email: '', name: '', password: '', role:'' }
   showCreateModal.value = true
 }
 const closeCreateModal = () => {
