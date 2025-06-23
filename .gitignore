@@ -7,24 +7,41 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+# Dependency directory
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+build/
+
+# System files
 .DS_Store
-dist
-dist-ssr
-coverage
+
+# Test coverage
+coverage/
+
+# Local env files
+.env.local
+.env.*.local
 *.local
 
+# Cypress test artifacts
 /cypress/videos/
 /cypress/screenshots/
 
-# Editor directories and files
+# Editor settings
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
+# TypeScript
 *.tsbuildinfo
+
+# Vercel config folder (optional but recommended if you're using CLI or preview deployments)
+.vercel/
