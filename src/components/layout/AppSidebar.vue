@@ -209,7 +209,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import {
@@ -219,16 +219,34 @@ import {
   ChevronDownIcon,
   HorizontalDots,
   PageIcon,
-  TableIcon,
   ListIcon,
 } from "../../icons";
 import { useSidebar } from "@/composables/useSidebar";
+
+interface SubItem {
+  name: string
+  path: string
+  pro?: boolean
+  new?: boolean // ✅ Add this
+}
+
+interface MenuItem {
+  name: string
+  icon: unknown
+  path?: string
+  subItems?: SubItem[]
+}
+
+interface MenuGroup {
+  title: string
+  items: MenuItem[]
+}
 
 const route = useRoute();
 
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
-const menuGroups = [
+const menuGroups: MenuGroup[] = [
   {
     title: "Menu",
     items: [
@@ -265,13 +283,11 @@ const menuGroups = [
   },
 ];
 
-const isActive = (path) => route.path === path;
-
-const toggleSubmenu = (groupIndex, itemIndex) => {
+const isActive = (path: string): boolean => route.path === path;
+const toggleSubmenu = (groupIndex: number, itemIndex: number): void => {
   const key = `${groupIndex}-${itemIndex}`;
   openSubmenu.value = openSubmenu.value === key ? null : key;
 };
-
 const isAnySubmenuRouteActive = computed(() => {
   return menuGroups.some((group) =>
     group.items.some(
@@ -281,7 +297,7 @@ const isAnySubmenuRouteActive = computed(() => {
   );
 });
 
-const isSubmenuOpen = (groupIndex, itemIndex) => {
+const isSubmenuOpen = (groupIndex: number, itemIndex: number) => {
   const key = `${groupIndex}-${itemIndex}`;
   return (
     openSubmenu.value === key ||
@@ -292,15 +308,17 @@ const isSubmenuOpen = (groupIndex, itemIndex) => {
   );
 };
 
-const startTransition = (el) => {
-  el.style.height = "auto";
-  const height = el.scrollHeight;
-  el.style.height = "0px";
-  el.offsetHeight; // force reflow
-  el.style.height = height + "px";
+const startTransition = (el: Element): void => {
+  const htmlEl = el as HTMLElement; // Cast to HTMLElement to access .style, etc.
+  htmlEl.style.height = "auto";
+  const height = htmlEl.scrollHeight;
+  htmlEl.style.height = "0px";
+  void htmlEl.offsetHeight;  // force reflow
+  htmlEl.style.height = height + "px";
 };
 
-const endTransition = (el) => {
-  el.style.height = "";
+const endTransition = (el: Element): void => {
+  (el as HTMLElement).style.height = "";
 };
+
 </script>
