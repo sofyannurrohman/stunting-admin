@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <FullScreenLayout>
     <div class="relative p-6 bg-white z-1 dark:bg-gray-900 sm:p-0">
@@ -42,8 +43,6 @@
                 </p>
               </div>
               <div>
-                
-                
                 <form @submit.prevent="handleSubmit">
                   <div class="space-y-5">
                     <!-- Email -->
@@ -204,7 +203,6 @@
               <router-link to="/" class="block mb-4">
                 <img width="{231}" height="{48}" src="/images/logo/logo-dark.png" alt="Logo" />
               </router-link>
-              
             </div>
           </div>
         </div>
@@ -243,8 +241,12 @@ const handleSubmit = async () => {
     }
 
     router.push('/') // or wherever you want to redirect after login
-  } catch (error: any) {
-    alert(error.message || 'Login failed')
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      alert(error.message || 'Login failed')
+    } else {
+      alert('Login failed')
+    }
   }
 }
 </script>

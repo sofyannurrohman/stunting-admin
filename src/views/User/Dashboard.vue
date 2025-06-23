@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <admin-layout>
     <div class="p-6 flex-col">
@@ -159,7 +160,7 @@ const form = ref<UserCreate>({
 const fetchUsers = async () => {
   try {
     const { data } = await getUsers()
-    users.value = data
+    users.value = data ?? []
   } catch (error) {
     console.error('Failed to fetch users:', error)
   }
