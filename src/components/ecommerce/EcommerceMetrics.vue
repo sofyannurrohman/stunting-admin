@@ -111,9 +111,13 @@ import { getUsers } from '@/api/user'
 import { getToddlers } from '@/api/toddler'
 import { getAllInformation } from '@/api/information'
 
-const users = ref([])
-const toddlers = ref([])
-const informations = ref([])
+import type { UserRead } from '@/api/schemas/user_schema'
+import type { ToddlerRead } from '@/api/schemas/toddler_schema'
+import type { InformationRead } from '@/api/schemas/information_schema'
+
+const users = ref<UserRead[]>([])
+const toddlers = ref<ToddlerRead[]>([])
+const informations = ref<InformationRead[]>([])
 
 const getData = async () => {
   const [usersRes, toddlersRes, infosRes] = await Promise.all([
