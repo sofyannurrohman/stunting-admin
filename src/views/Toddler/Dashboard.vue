@@ -173,6 +173,9 @@ const handleUpdateToddler = async () => {
     const updateData: ToddlerUpdate = {
       name: editForm.value.name,
       age_months: editForm.value.age_months,
+      gender: editForm.value.gender,
+    weight_kg: editForm.value.weight_kg,
+    height_cm: editForm.value.height_cm,
     }
     await updateToddler(editForm.value.id, updateData)
     closeEditModal()
