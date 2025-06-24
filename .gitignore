@@ -46,3 +46,4 @@ coverage/
 
 # Vercel config folder (optional but recommended if you're using CLI or preview deployments)
 .vercel/
+.env
