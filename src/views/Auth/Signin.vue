@@ -212,6 +212,7 @@
 </template>
 
 <script setup lang="ts">
+console.log('API BASE URL:', import.meta.env.VITE_API_BASE_URL)
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth' // adjust path as needed
