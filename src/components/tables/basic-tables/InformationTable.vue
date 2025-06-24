@@ -10,7 +10,11 @@
     </thead>
     <tbody>
       <tr v-for="(row, rowIndex) in data" :key="rowIndex">
-        <td v-for="(column, colIndex) in columns" :key="colIndex" class="border px-4 py-2 justify-center items-center">
+        <td
+          v-for="(column, colIndex) in columns"
+          :key="colIndex"
+          class="border px-4 py-2 justify-center items-center"
+        >
           <template v-if="column.field === 'image_url'">
             <img
               :src="getFullImageUrl(row[column.field])"
@@ -36,7 +40,7 @@
 
 <script setup lang="ts">
 import { defineProps, computed } from 'vue'
-const BASE_URL = import.meta.env.VITE_BACKEND_URL
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
 function getFullImageUrl(path: string) {
   if (!path) return '' // fallback if path is empty/null
   if (path.startsWith('http')) return path // already full URL
