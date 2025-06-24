@@ -40,11 +40,13 @@
 
 <script setup lang="ts">
 import { defineProps, computed } from 'vue'
-const BASE_URL = import.meta.env.VITE_API_BASE_URL
+
+const backendUrl = 'https://stunting-be-production.up.railway.app'
+
 function getFullImageUrl(path: string) {
   if (!path) return '' // fallback if path is empty/null
   if (path.startsWith('http')) return path // already full URL
-  return `${BASE_URL}${path}`
+  return `${backendUrl}${path}`
 }
 interface Column {
   label: string
