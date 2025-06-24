@@ -10,7 +10,7 @@ export const getUser = (userId: number) => {
 };
 
 export const createUser = (payload: UserCreate) => {
-  return api.post<UserRead>('/users/', payload);
+  return api.post<UserRead>('/users', payload);
 };
 
 export const updateUser = (userId: number, payload: UserUpdate) => {
