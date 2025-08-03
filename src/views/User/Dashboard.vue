@@ -6,7 +6,7 @@
       <!-- Add User Button -->
       <button
         @click="openCreateModal"
-        class="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        class="mb-4 bg-pink-500 text-white px-4 py-2 rounded hover:bg-blue-600"
       >
         + Peserta
       </button>
@@ -32,7 +32,7 @@
               <input
                 v-model="form.email"
                 type="email"
-                placeholder="Masukkan Alamat Email"
+                placeholder="Masukkan Email"
                 class="w-full border p-2 rounded"
                 required
               />
@@ -42,44 +42,57 @@
               <input
                 v-model="form.name"
                 type="text"
-                placeholder="Masukkan Nama User"
+                placeholder="Masukkan Nama"
                 class="w-full border p-2 rounded"
                 required
               />
             </div>
             <div class="mb-4">
-              <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-              <select
-                id="role"
-                v-model="form.role"
-                class="block w-full rounded-md border border-gray-300 bg-white p-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
-              >
+              <label class="block mb-1">Role</label>
+              <select v-model="form.role" class="w-full border p-2 rounded" required>
                 <option disabled value="">Select a role</option>
-                <option v-for="role in roles" :key="role" :value="role">
-                  {{ role }}
-                </option>
+                <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
               </select>
             </div>
             <div class="mb-4">
               <label class="block mb-1">Password</label>
               <input
                 v-model="form.password"
-                placeholder="Masukkan Password Min 8 Karakter"
                 type="password"
+                placeholder="Masukkan Password"
                 class="w-full border p-2 rounded"
-                min="8"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block mb-1">RT</label>
+              <input
+                v-model="form.rt"
+                type="text"
+                placeholder="Masukkan RT"
+                class="w-full border p-2 rounded"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block mb-1">RW</label>
+              <input
+                v-model="form.rw"
+                type="text"
+                placeholder="Masukkan RW"
+                class="w-full border p-2 rounded"
                 required
               />
             </div>
             <div class="flex justify-end space-x-2">
               <button type="button" @click="closeCreateModal" class="px-4 py-2 border rounded">
-                Cancel
+                Abaikan
               </button>
               <button
                 type="submit"
-                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                class="px-4 py-2 bg-pink-500 text-white rounded hover:bg-blue-600"
               >
-                Create
+                Buat
               </button>
             </div>
           </form>
@@ -91,7 +104,7 @@
         class="fixed inset-0 bg-black bg-opacity-100 flex items-center justify-center"
       >
         <div class="bg-white p-6 rounded-lg w-96">
-          <h2 class="text-lg font-bold mb-4">Edit User</h2>
+          <h2 class="text-lg font-bold mb-4">Ubah User</h2>
           <form @submit.prevent="handleUpdateUser">
             <div class="mb-4">
               <label class="block mb-1">Email</label>
@@ -111,15 +124,27 @@
                 required
               />
             </div>
+             <div class="mb-4">
+              <label class="block mb-1">Role</label>
+              <input v-model="editForm.role" type="text" class="w-full border p-2 rounded" required />
+            </div>
+            <div class="mb-4">
+              <label class="block mb-1">RT</label>
+              <input v-model="editForm.rt" type="text" class="w-full border p-2 rounded" required />
+            </div>
+            <div class="mb-4">
+              <label class="block mb-1">RW</label>
+              <input v-model="editForm.rw" type="text" class="w-full border p-2 rounded" required />
+            </div>
             <div class="flex justify-end space-x-2">
               <button type="button" @click="closeEditModal" class="px-4 py-2 border rounded">
-                Cancel
+                Abaikan
               </button>
               <button
                 type="submit"
                 class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
               >
-                Update
+                Ubah
               </button>
             </div>
           </form>
@@ -142,6 +167,8 @@ const columns: { label: string; field: string }[] = [
   { label: 'Email', field: 'email' },
   { label: 'Name', field: 'name' },
   { label: 'Role', field: 'role' },
+  { label: 'RT', field: 'rt' },
+  { label: 'RW', field: 'rw' },
 ]
 
 // Users data
@@ -152,10 +179,11 @@ const showCreateModal = ref(false)
 const form = ref<UserCreate>({
   email: '',
   name: '',
-  role: '',
   password: '',
+  role: '',
+  rt: '',
+  rw: '',
 })
-
 // Fetch users
 const fetchUsers = async () => {
   try {
@@ -171,7 +199,7 @@ const handleCreateUser = async () => {
   try {
     await createUser(form.value)
     closeCreateModal()
-    form.value = { email: '', name: '', password: '', role: '' } // ✅ reset
+    form.value = { email: '', name: '', password: '', role: '', rt: '', rw: '' } // ✅ reset
     fetchUsers()
   } catch (error) {
     console.error('Failed to create user:', error)
@@ -183,10 +211,16 @@ const editForm = ref<{
   id: number
   email: string
   name: string
+  role: string
+  rt: string
+  rw: string
 }>({
   id: 0,
   email: '',
   name: '',
+  role: '',
+  rt: '',
+  rw: '',
 })
 
 const handleEditUser = (user: UserRead) => {
@@ -194,6 +228,9 @@ const handleEditUser = (user: UserRead) => {
     id: user.id,
     email: user.email,
     name: user.name,
+    role: user.role,
+    rt: user.rt,
+    rw: user.rw,
   }
   showEditModal.value = true
 }
@@ -206,10 +243,14 @@ const handleUpdateUser = async () => {
   try {
     const userUpdate: UserUpdate = {
       name: editForm.value.name,
+      email: editForm.value.email,
+      role: editForm.value.role,
+      rt: editForm.value.rt,
+      rw: editForm.value.rw,
     }
     await updateUser(editForm.value.id, userUpdate)
     closeEditModal()
-    fetchUsers() // Refresh
+    fetchUsers()
   } catch (error) {
     console.error('Failed to update user:', error)
   }
@@ -228,7 +269,7 @@ const handleDeleteUser = async (user: UserRead) => {
 
 // Open/close modal
 const openCreateModal = () => {
-  form.value = { email: '', name: '', password: '', role:'' }
+  form.value = { email: '', name: '', password: '', role: '', rt: '', rw: '' }
   showCreateModal.value = true
 }
 const closeCreateModal = () => {

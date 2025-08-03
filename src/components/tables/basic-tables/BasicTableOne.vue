@@ -10,7 +10,7 @@
     </thead>
     <tbody>
       <tr v-for="(row, rowIndex) in data" :key="rowIndex">
-        <td v-for="(column, colIndex) in columns" :key="colIndex" class="border px-4 py-2">
+        <td v-for="(column, colIndex) in columns" :key="colIndex" class="border px-4 py-2 text-center">
           {{ row[column.field] }}
         </td>
         <td v-if="hasActions" class="border px-4 py-2">

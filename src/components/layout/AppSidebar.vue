@@ -256,9 +256,14 @@ const menuGroups: MenuGroup[] = [
         path: "/"
       },
       {
-        icon: CalenderIcon,
+        icon: UserCircleIcon,
         name: "Data Peserta",
         path: "/users",
+      },
+      {
+        icon: UserCircleIcon,
+        name: "Data Diri Balita",
+        path: "/child-profiles",
       },
       {
         icon: UserCircleIcon,

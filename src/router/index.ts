@@ -44,6 +44,15 @@ const router = createRouter({
       },
     },
     {
+      path: '/child-profiles',
+      name: 'Child Profile Dashboard',
+      component: () => import('../views/ChildProfile/Dashboard.vue'),
+      meta: {
+        title: 'ChildProfile Dashboard',
+        requiresAuth: true,
+      },
+    },
+    {
       path: '/blank',
       name: 'Blank',
       component: () => import('../views/Pages/BlankPage.vue'),

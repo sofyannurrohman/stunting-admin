@@ -3,7 +3,7 @@
     <div>
       <h1 class="text-2xl font-bold mb-4 dark:text-white">List Artikel Kesehatan</h1>
 
-      <button @click="openCreateModal" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">
+      <button @click="openCreateModal" class="bg-pink-500 text-white px-4 py-2 rounded mb-4">
         + Artikel
       </button>
 
@@ -67,11 +67,19 @@
                 class="border p-2 w-full"
               />
             </div>
-            <div v-if="!isEditing">
+            <div v-if="isEditing && currentId">
+              <label>Gambar Saat Ini:</label>
+              <img
+                :src="getImageUrlById(currentId)"
+                alt="Current image"
+                class="mt-2 w-32 h-auto border"
+              />
+            </div>
+            <div>
               <label>Foto Artikel</label>
               <input @change="handleFileChange" type="file" class="border p-2 w-full" />
             </div>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2">
+            <button type="submit" class="bg-pink-500 text-white px-4 py-2">
               {{ isEditing ? 'Update' : 'Create' }}
             </button>
           </form>
@@ -130,13 +138,17 @@ const openCreateModal = () => {
   isEditing.value = false
   isModalVisible.value = true
 }
-
+const getImageUrlById = (id: number) => {
+  const info = information.value.find((item) => item.id === id)
+  return info?.image_url ?? ''
+}
 const openEditModal = (row: InformationRead) => {
   form.title = row.title
   form.content = row.content
   form.source = row.source
   form.category = row.category ?? ''
   currentId.value = row.id
+  imageFile.value = null // <--- important: reset
   isEditing.value = true
   isModalVisible.value = true
 }
@@ -159,7 +171,6 @@ const handleFileChange = (e: Event) => {
     imageFile.value = target.files[0]
   }
 }
-
 const handleSubmit = async () => {
   const formData = new FormData()
   formData.append('title', form.title)
@@ -170,16 +181,23 @@ const handleSubmit = async () => {
 
   try {
     if (isEditing.value && currentId.value) {
-      await updateInformation(currentId.value, formData) // pass the real data
+      // Edit: image optional
+      await updateInformation(currentId.value, formData)
       alert('Information updated!')
     } else {
-      await createInformation(formData) // pass the real data
+      // Create: image required
+      if (!imageFile.value) {
+        alert('Please select an image!')
+        return
+      }
+      await createInformation(formData)
       alert('Information created!')
     }
     await fetchInformation()
     closeModal()
   } catch (error) {
     console.error('Error submitting information:', error)
+    alert('Something went wrong. Please try again.')
   }
 }
 
