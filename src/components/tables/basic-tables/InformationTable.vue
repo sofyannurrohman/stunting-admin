@@ -41,12 +41,14 @@
 <script setup lang="ts">
 import { defineProps, computed } from 'vue'
 
-const backendUrl = 'https://stunting-be-production.up.railway.app'
+const backendUrl = import.meta.env.VITE_API_BASE_URL || 'https://default-backend-url.com'
 
 function getFullImageUrl(path: string) {
   if (!path) return '' // fallback if path is empty/null
   if (path.startsWith('http')) return path // already full URL
-  return `${backendUrl}${path}`
+  // Make sure there is a slash between backendUrl and path
+  const slash = backendUrl.endsWith('/') || path.startsWith('/') ? '' : '/'
+  return `${backendUrl}${slash}${path}`
 }
 interface Column {
   label: string
