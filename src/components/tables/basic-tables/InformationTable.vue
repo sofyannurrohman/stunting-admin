@@ -41,8 +41,15 @@
 <script setup lang="ts">
 import { defineProps, computed } from 'vue'
 
-const backendUrl = import.meta.env.VITE_API_BASE_URL || 'https://default-backend-url.com'
+let backendUrl = import.meta.env.VITE_API_BASE_URL || ''
 
+// Remove trailing slash if any
+if (backendUrl.endsWith('/')) backendUrl = backendUrl.slice(0, -1)
+
+// Remove '/api/v1' if present at the end
+if (backendUrl.endsWith('/api/v1')) {
+  backendUrl = backendUrl.slice(0, -('/api/v1'.length))
+}
 function getFullImageUrl(path: string) {
   if (!path) return '' // fallback if path is empty/null
   if (path.startsWith('http')) return path // already full URL
