@@ -1,43 +1,52 @@
-import axios from 'axios';
+import axios from 'axios'
 
 const baseURL = import.meta.env.VITE_API_BASE_URL
   ? import.meta.env.VITE_API_BASE_URL.replace('http://', 'https://')
-  : import.meta.env.VITE_API_BASE_URL;
+  : import.meta.env.VITE_API_BASE_URL
 
-console.log("Using API Base URL:", baseURL);
+console.log('Using API Base URL:', baseURL)
 
 const api = axios.create({
   baseURL,
-});
-api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
+})
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`
   }
-  return config;
-});
+  return config
+})
 api.interceptors.response.use(
-  response => response,
-  async error => {
+  (response) => response,
+  async (error) => {
     if (error.response && error.response.status === 307) {
-      const redirectUrl = error.response.headers.location;
-      console.log('Redirect detected:', redirectUrl);
+      const redirectUrl = error.response.headers.location
+      console.log('Redirect detected:', redirectUrl)
       if (redirectUrl?.startsWith('http://')) {
-        console.warn('Rewriting HTTP redirect to HTTPS:', redirectUrl);
-        const httpsUrl = redirectUrl.replace('http://', 'https://');
+        console.warn('Rewriting HTTP redirect to HTTPS:', redirectUrl)
+        const httpsUrl = redirectUrl.replace('http://', 'https://')
         return api.request({
           ...error.config,
           url: httpsUrl.replace(baseURL, ''),
           baseURL,
-        });
+        })
       }
     }
+    api.interceptors.request.use((config) => {
+      const fullUrl = `${config.baseURL}${config.url}`
+      console.log('Outgoing request to:', fullUrl)
+      const token = localStorage.getItem('token')
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
+      return config
+    })
     console.error('Axios Error:', {
       url: error.config?.url,
       baseURL: error.config?.baseURL,
       message: error.message,
-    });
-    return Promise.reject(error);
-  }
-);
-export default api;
+    })
+    return Promise.reject(error)
+  },
+)
+export default api
